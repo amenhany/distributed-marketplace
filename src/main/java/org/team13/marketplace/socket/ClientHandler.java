@@ -1,23 +1,27 @@
 package org.team13.marketplace.socket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.team13.marketplace.model.Item;
-import org.team13.marketplace.model.User;
 import org.team13.marketplace.service.AuthService;
 import org.team13.marketplace.service.ItemService;
 import org.team13.marketplace.service.UserService;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class ClientHandler {
-    @Autowired private ItemService itemService;
-    @Autowired private UserService userService;
-    @Autowired private AuthService authService;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ItemService itemService;
+    private final UserService userService;
+    private final AuthService authService;
+    private final JsonMapper mapper;
 
     public void handleClient(Socket socket) {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -39,10 +43,8 @@ public class ClientHandler {
 
                 if (command.equals("REGISTER")) {
                     String[] creds = payload.split(",");
-                    User user = userService.register(creds[0], creds[1]);
-                    out.println("SUCCESS|" + mapper.writeValueAsString(user));
-                }
-                else if (command.equals("LOGIN")) {
+                    send(out, "OK", "Registered", userService.register(creds[0], creds[1]));
+                } else if (command.equals("LOGIN")) {
                     // For LOGIN, payload is "username,password"
                     String[] creds = payload.split(",");
                     String resultToken = authService.login(creds[0], creds[1]);
@@ -60,6 +62,15 @@ public class ClientHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void send(PrintWriter out, String status, String message, Object data) {
+        try {
+            out.println(mapper.writeValueAsString(
+                    new SocketResponse(status, message, data)));
+        } catch (Exception e) {
+            log.error("Failed to serialize response", e);
         }
     }
 }
