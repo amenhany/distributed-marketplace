@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Sharded;
 
 import java.time.LocalDateTime;
 
 @Document(collection = "users")
-@Sharded(shardKey = "_id")
+//@Sharded(shardKey = "_id")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

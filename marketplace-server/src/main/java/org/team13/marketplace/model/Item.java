@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Sharded;
 
 @Document(collection = "items")
-@Sharded(shardKey = "brand")
+//@Sharded(shardKey = "brand")
 @Builder(toBuilder = true)
 @Data
 @NoArgsConstructor
