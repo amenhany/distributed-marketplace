@@ -1,43 +1,45 @@
 package org.team13.marketplace.client.socket;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import org.team13.marketplace.socket.SocketRequest;
+import org.team13.marketplace.socket.SocketResponse;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.io.*;
 import java.net.Socket;
+import java.util.Map;
 
 public class MarketplaceClient {
     private Socket socket;
-    private PrintWriter out;
     private BufferedReader in;
+    private PrintWriter out;
+    private final JsonMapper mapper = new JsonMapper();
 
-    public void connect(String host, int port) {
-        try {
-            this.socket = new Socket(host, port);
-            this.out = new PrintWriter(socket.getOutputStream(), true);
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            
-            System.out.println("Connected to server on " + host + ":" + port);
-            
-            // Start a thread to listen for messages from the server
-            new Thread(this::listenToServer).start();
-            
-        } catch (Exception e) {
-            System.err.println("Could not connect to socket server: " + e.getMessage());
-        }
+    public void connect(String host, int port) throws IOException {
+        socket = new Socket(host, port);
+        in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+        in.readLine(); // welcome message
     }
 
-    private void listenToServer() {
-        try {
-            String message;
-            while ((message = in.readLine()) != null) {
-                System.out.println("Server says: " + message);
-            }
-        } catch (Exception e) {
-            System.out.println("Connection lost.");
-        }
+    public <T> SocketResponse send(String command, Object payload, Class<T> dataType)
+            throws IOException {
+        Map<String, Object> payloadMap = mapper.convertValue(payload, new TypeReference<>() {});
+        SocketRequest req = new SocketRequest(command, payloadMap);
+        out.println(mapper.writeValueAsString(req));
+
+        String line = in.readLine();
+        JsonNode node = mapper.readTree(line);
+        T data = mapper.treeToValue(node.get("data"), dataType);
+        return new SocketResponse(
+                node.get("status").asString("ERROR"),
+                node.get("message").asString(""),
+                data);
     }
 
-    public void sendMessage(String msg) {
-        if (out != null) out.println(msg);
+    public void disconnect() throws IOException {
+        send("DISCONNECT", Map.of(), Void.class);
+        socket.close();
     }
 }
