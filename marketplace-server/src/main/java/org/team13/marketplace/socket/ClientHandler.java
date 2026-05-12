@@ -46,15 +46,16 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+            out.println("WELCOME_TO_MARKETPLACE");
             String input;
             while ((input = in.readLine()) != null) {
                 try {
                     SocketRequest req = mapper.readValue(input, SocketRequest.class);
                     handleCommand(req, out);
 
-                    if ("DISCONNECT".equals(req.getCommand())) break;
+                    if ("DISCONNECT".equals(req.getCommand()))
+                        break;
 
                 } catch (JacksonException e) {
                     log.warn("Received malformed JSON: {}", input);
@@ -198,7 +199,6 @@ public class ClientHandler implements Runnable {
         }
         return mapper.convertValue(payload, type);
     }
-
 
     private void send(PrintWriter out, String status, String message, Object data) {
         try {
