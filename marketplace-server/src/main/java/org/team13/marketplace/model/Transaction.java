@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Sharded;
 
 import java.time.LocalDateTime;
 
 @Document(collection = "transactions")
-@Sharded(shardKey = "buyerId")
+//@Sharded(shardKey = "buyerId")
 @Builder
 @Data
 @NoArgsConstructor
