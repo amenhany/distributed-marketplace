@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import org.team13.marketplace.client.Forms.LoginForms;
+import org.team13.marketplace.client.Forms.RegisterForms;
 import org.team13.marketplace.client.socket.MarketplaceClient;
 
 public class MainApp extends Application {
@@ -59,7 +62,28 @@ public class MainApp extends Application {
         System.exit(0);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+   public static void main(String[] args) {
+
+        try {
+
+            // keep this for later when we want to test socket connection (login\register) without GUI
+
+            // MarketplaceClient client = new MarketplaceClient();
+
+            // client.connect("localhost", 9090);
+
+            // RegisterForms registerForms = new RegisterForms(client);
+            // registerForms.show();
+
+            // LoginForms loginForms = new LoginForms(client);
+            // loginForms.show();
+
+            launch(args);
+
+        } catch (Exception e) {
+
+            System.out.println("[!] Failed to connect to server");
+            e.printStackTrace();
+        }
+}
 }
