@@ -1,9 +1,8 @@
 package org.team13.marketplace.client.Forms;
 
 import org.team13.marketplace.client.socket.MarketplaceClient;
+import org.team13.marketplace.dto.auth.DepositRequest;
 import org.team13.marketplace.socket.SocketResponse;
-
-import java.util.Map;
 
 public class DepositForms {
     private final MarketplaceClient client;
@@ -13,7 +12,8 @@ public class DepositForms {
     }
 
     public double deposit(double amount) throws Exception {
-        Map<String, Object> payload = Map.of("amount", amount);
+        DepositRequest payload = new DepositRequest();
+        payload.setAmount(amount);
         SocketResponse response = client.send("DEPOSIT", payload, Double.class);
 
         if ("OK".equalsIgnoreCase(response.getStatus())) {

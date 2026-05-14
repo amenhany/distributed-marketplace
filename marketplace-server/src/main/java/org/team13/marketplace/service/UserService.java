@@ -47,8 +47,8 @@ public class UserService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        userAccountRepository.save(UserAccount.builder().id(user.getId()).build());
         userRepository.save(user);
+        userAccountRepository.save(UserAccount.builder().id(user.getId()).build());
 
         return UserMapper.toDto(user);
     }
