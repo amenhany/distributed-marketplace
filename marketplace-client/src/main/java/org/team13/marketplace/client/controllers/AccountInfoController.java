@@ -111,6 +111,11 @@ public class AccountInfoController {
     private void handleLogout() {
         panelSwitcher.switchToLoginPanel();
     }
+
+    @FXML
+    private void handleDeposit() {
+        panelSwitcher.switchToDepositPanel(currentUser);
+    }
     
     private void loadAccountInfo() {
         if (currentUser == null) {

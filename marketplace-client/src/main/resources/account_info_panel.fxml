@@ -17,7 +17,10 @@
     
     <VBox spacing="15" style="-fx-padding: 15; -fx-background-color: white; -fx-background-radius: 5;">
         <Label text="Current Balance" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-        <Label fx:id="balanceLabel" text="$0.00" style="-fx-font-size: 24px; -fx-text-fill: #4CAF50; -fx-font-weight: bold;"/>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label fx:id="balanceLabel" text="$0.00" style="-fx-font-size: 24px; -fx-text-fill: #4CAF50; -fx-font-weight: bold;"/>
+            <Button text="Deposit" onAction="#handleDeposit" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </HBox>
     </VBox>
     
     <TabPane VBox.vgrow="ALWAYS">
