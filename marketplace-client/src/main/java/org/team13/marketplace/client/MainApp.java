@@ -14,12 +14,11 @@ import org.team13.marketplace.client.socket.MarketplaceClient;
 public class MainApp extends Application {
 
     private MarketplaceClient socketClient;
-    private Label statusLabel = new Label("Connecting...");
+    private Label statusLabel = new Label("Connecting to Server...");
     private PanelSwitcher panelSwitcher;
-
     @Override
     public void start(Stage stage) {
-        // Build UI first
+        // 1. Build Splash/Connection UI
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER);
         root.getChildren().addAll(new Label("Marketplace System"), statusLabel);
@@ -27,24 +26,28 @@ public class MainApp extends Application {
         Scene scene = new Scene(root, 400, 200);
         stage.setTitle("Client Terminal");
         stage.setScene(scene);
-        stage.show(); // Show window IMMEDIATELY
+        stage.show(); 
 
-        // Connect in a separate thread so the GUI doesn't freeze
+        // 2. Connect in a background thread
         Thread connectionThread = new Thread(() -> {
             try {
                 socketClient = new MarketplaceClient();
+                // Match the port used in your previous snippet (9090)
                 socketClient.connect("localhost", 9090);
-                
-                // Create panel switcher
-                panelSwitcher = new PanelSwitcher(stage, socketClient);
                 
                 // Update UI on the JavaFX Thread
                 Platform.runLater(() -> {
                     statusLabel.setText("Connected Successfully!");
                     statusLabel.setStyle("-fx-text-fill: green;");
                     System.out.println("[SUCCESS] GUI Updated.");
+                // Initialize panel switcher with the established connection
+                panelSwitcher = new PanelSwitcher(stage, socketClient);
+                
+                Platform.runLater(() -> {
+                    statusLabel.setText("Connected Successfully!");
+                    statusLabel.setStyle("-fx-text-fill: green;");
                     
-                    // Switch to login panel after successful connection
+                    // 3. Hand off to the Login Screen via PanelSwitcher
                     panelSwitcher.switchToLoginPanel();
                 });
             } catch (Exception e) {
@@ -68,28 +71,9 @@ public class MainApp extends Application {
         System.exit(0);
     }
 
-   public static void main(String[] args) {
-
-        try {
-
-            // keep this for later when we want to test socket connection (login\register) without GUI
-
-            // MarketplaceClient client = new MarketplaceClient();
-
-            // client.connect("localhost", 9090);
-
-            // RegisterForms registerForms = new RegisterForms(client);
-            // registerForms.show();
-
-            // LoginForms loginForms = new LoginForms(client);
-            // loginForms.show();
-
-            launch(args);
-
-        } catch (Exception e) {
-
-            System.out.println("[!] Failed to connect to server");
-            e.printStackTrace();
-        }
-}
+    public static void main(String[] args) {
+        // Only call launch(args) here. 
+        // The startup logic belongs in the start() method.
+        launch(args);
+    }
 }
