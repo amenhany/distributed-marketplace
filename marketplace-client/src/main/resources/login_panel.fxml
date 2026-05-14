@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.team13.marketplace.client.controllers.LoginController"
+      style="-fx-padding: 30; -fx-background-color: #f5f5f5;">
+    
+    <Label text="Marketplace Login" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+    
+    <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: white; -fx-background-radius: 10;">
+        <TextField fx:id="usernameField" promptText="Username/Email" prefWidth="250"/>
+        <PasswordField fx:id="passwordField" promptText="Password" prefWidth="250"/>
+        <Button text="Login" onAction="#handleLogin" prefWidth="250" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button text="Register" onAction="#handleRegister" prefWidth="250" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+    </VBox>
+    
+    <Label fx:id="statusLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+    
+</VBox>

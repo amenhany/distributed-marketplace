@@ -8,20 +8,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import org.team13.marketplace.client.Forms.LoginForms;
-import org.team13.marketplace.client.Forms.RegisterForms;
+import org.team13.marketplace.client.controllers.PanelSwitcher;
 import org.team13.marketplace.client.socket.MarketplaceClient;
 
 public class MainApp extends Application {
 
     private MarketplaceClient socketClient;
-<<<<<<< Updated upstream
-    private Label statusLabel = new Label("Connecting...");
-=======
     private Label statusLabel = new Label("Connecting to Server...");
     private PanelSwitcher panelSwitcher;
->>>>>>> Stashed changes
-
     @Override
     public void start(Stage stage) {
         // 1. Build Splash/Connection UI
@@ -41,13 +35,11 @@ public class MainApp extends Application {
                 // Match the port used in your previous snippet (9090)
                 socketClient.connect("localhost", 9090);
                 
-<<<<<<< Updated upstream
                 // Update UI on the JavaFX Thread
                 Platform.runLater(() -> {
                     statusLabel.setText("Connected Successfully!");
                     statusLabel.setStyle("-fx-text-fill: green;");
                     System.out.println("[SUCCESS] GUI Updated.");
-=======
                 // Initialize panel switcher with the established connection
                 panelSwitcher = new PanelSwitcher(stage, socketClient);
                 
@@ -57,7 +49,6 @@ public class MainApp extends Application {
                     
                     // 3. Hand off to the Login Screen via PanelSwitcher
                     panelSwitcher.switchToLoginPanel();
->>>>>>> Stashed changes
                 });
             } catch (Exception e) {
                 Platform.runLater(() -> {
