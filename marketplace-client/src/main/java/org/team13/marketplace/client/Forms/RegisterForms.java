@@ -19,7 +19,7 @@ public class RegisterForms {
         regReq.setEmail(email);
 
         // Send request
-        SocketResponse response = client.send("REGISTER", regReq, null);
+        SocketResponse response = client.send("REGISTER", regReq, Void.class);
 
         // Check response
         if (!"OK".equalsIgnoreCase(response.getStatus())) {

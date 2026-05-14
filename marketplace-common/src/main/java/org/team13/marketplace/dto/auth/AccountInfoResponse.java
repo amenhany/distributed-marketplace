@@ -1,13 +1,17 @@
 package org.team13.marketplace.dto.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.team13.marketplace.dto.item.ItemDto;
 
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountInfoResponse {
 
     private String userId;
