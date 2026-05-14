@@ -8,14 +8,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import org.team13.marketplace.client.Forms.LoginForms;
-import org.team13.marketplace.client.Forms.RegisterForms;
+import org.team13.marketplace.client.controllers.PanelSwitcher;
 import org.team13.marketplace.client.socket.MarketplaceClient;
 
 public class MainApp extends Application {
 
     private MarketplaceClient socketClient;
     private Label statusLabel = new Label("Connecting...");
+    private PanelSwitcher panelSwitcher;
 
     @Override
     public void start(Stage stage) {
@@ -35,11 +35,17 @@ public class MainApp extends Application {
                 socketClient = new MarketplaceClient();
                 socketClient.connect("localhost", 9090);
                 
+                // Create panel switcher
+                panelSwitcher = new PanelSwitcher(stage, socketClient);
+                
                 // Update UI on the JavaFX Thread
                 Platform.runLater(() -> {
                     statusLabel.setText("Connected Successfully!");
                     statusLabel.setStyle("-fx-text-fill: green;");
                     System.out.println("[SUCCESS] GUI Updated.");
+                    
+                    // Switch to login panel after successful connection
+                    panelSwitcher.switchToLoginPanel();
                 });
             } catch (Exception e) {
                 Platform.runLater(() -> {

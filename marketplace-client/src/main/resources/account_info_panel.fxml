@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.team13.marketplace.client.controllers.AccountInfoController"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+    
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 5;">
+        <Label text="Account Info" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Back to Home" onAction="#handleBackToHome" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        <Button text="Logout" onAction="#handleLogout" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+    </HBox>
+    
+    <VBox spacing="15" style="-fx-padding: 15; -fx-background-color: white; -fx-background-radius: 5;">
+        <Label text="Current Balance" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <Label fx:id="balanceLabel" text="$0.00" style="-fx-font-size: 24px; -fx-text-fill: #4CAF50; -fx-font-weight: bold;"/>
+    </VBox>
+    
+    <TabPane VBox.vgrow="ALWAYS">
+        <Tab text="Purchased Items" closable="false">
+            <TableView fx:id="purchasedItemsTable">
+                <columns>
+                    <TableColumn fx:id="purchasedNameColumn" text="Name" prefWidth="150"/>
+                    <TableColumn fx:id="purchasedBrandColumn" text="Brand" prefWidth="120"/>
+                    <TableColumn fx:id="purchasedPriceColumn" text="Price" prefWidth="100"/>
+                    <TableColumn fx:id="purchasedDateColumn" text="Purchase Date" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </Tab>
+        
+        <Tab text="Sold Items" closable="false">
+            <TableView fx:id="soldItemsTable">
+                <columns>
+                    <TableColumn fx:id="soldNameColumn" text="Name" prefWidth="150"/>
+                    <TableColumn fx:id="soldBrandColumn" text="Brand" prefWidth="120"/>
+                    <TableColumn fx:id="soldPriceColumn" text="Price" prefWidth="100"/>
+                    <TableColumn fx:id="soldDateColumn" text="Sale Date" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </Tab>
+        
+        <Tab text="Items for Sale" closable="false">
+            <TableView fx:id="forSaleItemsTable">
+                <columns>
+                    <TableColumn fx:id="forSaleNameColumn" text="Name" prefWidth="150"/>
+                    <TableColumn fx:id="forSaleBrandColumn" text="Brand" prefWidth="120"/>
+                    <TableColumn fx:id="forSalePriceColumn" text="Price" prefWidth="100"/>
+                    <TableColumn fx:id="forSaleStatusColumn" text="Status" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </Tab>
+    </TabPane>
+    
+</VBox>
