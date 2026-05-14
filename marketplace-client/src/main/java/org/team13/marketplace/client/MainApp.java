@@ -29,36 +29,33 @@ public class MainApp extends Application {
         stage.show(); 
 
         // 2. Connect in a background thread
-        Thread connectionThread = new Thread(() -> {
-            try {
-                socketClient = new MarketplaceClient();
-                // Match the port used in your previous snippet (9090)
-                socketClient.connect("localhost", 9090);
-                
-                // Update UI on the JavaFX Thread
-                Platform.runLater(() -> {
-                    statusLabel.setText("Connected Successfully!");
-                    statusLabel.setStyle("-fx-text-fill: green;");
-                    System.out.println("[SUCCESS] GUI Updated.");
-                // Initialize panel switcher with the established connection
-                panelSwitcher = new PanelSwitcher(stage, socketClient);
-                
-                Platform.runLater(() -> {
-                    statusLabel.setText("Connected Successfully!");
-                    statusLabel.setStyle("-fx-text-fill: green;");
-                    
-                    // 3. Hand off to the Login Screen via PanelSwitcher
-                    panelSwitcher.switchToLoginPanel();
-                });
-            } catch (Exception e) {
-                Platform.runLater(() -> {
-                    statusLabel.setText("Connection Failed: " + e.getMessage());
-                    statusLabel.setStyle("-fx-text-fill: red;");
-                });
-                e.printStackTrace();
+        Thread connectionThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    socketClient = new MarketplaceClient();
+                    // Match the port used in your previous snippet (9090)
+                    socketClient.connect("localhost", 9090);
+
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Connected Successfully!");
+                        statusLabel.setStyle("-fx-text-fill: green;");
+                        System.out.println("[SUCCESS] GUI Updated.");
+
+                        // Initialize panel switcher with the established connection
+                        panelSwitcher = new PanelSwitcher(stage, socketClient);
+                        panelSwitcher.switchToLoginPanel();
+                    });
+                } catch (Exception e) {
+                    Platform.runLater(() -> {
+                        statusLabel.setText("Connection Failed: " + e.getMessage());
+                        statusLabel.setStyle("-fx-text-fill: red;");
+                    });
+                    e.printStackTrace();
+                }
             }
         });
-        
+
         connectionThread.setDaemon(true);
         connectionThread.start();
     }
