@@ -44,6 +44,8 @@ public class HomeController {
     
     public void setClient(MarketplaceClient client) {
         this.homeForms = new HomeForms(client);
+        // Load all items after forms are initialized
+        loadItems("");
     }
     
     public void setPanelSwitcher(PanelSwitcher panelSwitcher) {
@@ -84,9 +86,6 @@ public class HomeController {
                 }
             }
         });
-        
-        // Load all items on initialization
-        loadItems("");
     }
     
     @FXML

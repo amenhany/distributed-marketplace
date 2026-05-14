@@ -4,6 +4,7 @@ import org.team13.marketplace.client.socket.MarketplaceClient;
 import org.team13.marketplace.dto.auth.AccountInfoResponse;
 import org.team13.marketplace.dto.item.ItemDto;
 import org.team13.marketplace.socket.SocketResponse;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.List;
 
@@ -14,48 +15,10 @@ public class AccountInfoForms {
         this.client = client;
     }
 
-    public List<ItemDto> getPurchasedItems() {
-        try {
-            SocketResponse response = client.send("GET_PURCHASED_ITEMS", null, List.class);
-
-            if ("OK".equalsIgnoreCase(response.getStatus())) {
-                return (List<ItemDto>) response.getData();
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading purchased items: " + e.getMessage());
-        }
-        return List.of();
-    }
-
-    public List<ItemDto> getSoldItems() {
-        try {
-            SocketResponse response = client.send("GET_SOLD_ITEMS", null, List.class);
-
-            if ("OK".equalsIgnoreCase(response.getStatus())) {
-                return (List<ItemDto>) response.getData();
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading sold items: " + e.getMessage());
-        }
-        return List.of();
-    }
-
-    public List<ItemDto> getForSaleItems() {
-        try {
-            SocketResponse response = client.send("GET_FOR_SALE_ITEMS", null, List.class);
-
-            if ("OK".equalsIgnoreCase(response.getStatus())) {
-                return (List<ItemDto>) response.getData();
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading for sale items: " + e.getMessage());
-        }
-        return List.of();
-    }
-
+    @SuppressWarnings("unchecked")
     public AccountInfoResponse getAccountInfo() {
         try {
-            SocketResponse response = client.send("GET_ACCOUNT_INFO", null, AccountInfoResponse.class);
+            SocketResponse response = client.send("ACCOUNT", java.util.Map.of(), AccountInfoResponse.class);
 
             if ("OK".equalsIgnoreCase(response.getStatus())) {
                 return (AccountInfoResponse) response.getData();
@@ -64,5 +27,20 @@ public class AccountInfoForms {
             System.err.println("Error loading account info: " + e.getMessage());
         }
         return null;
+    }
+
+    public List<ItemDto> getPurchasedItems() {
+        AccountInfoResponse info = getAccountInfo();
+        return info != null && info.getPurchasedItems() != null ? info.getPurchasedItems() : List.of();
+    }
+
+    public List<ItemDto> getSoldItems() {
+        AccountInfoResponse info = getAccountInfo();
+        return info != null && info.getSoldItems() != null ? info.getSoldItems() : List.of();
+    }
+
+    public List<ItemDto> getForSaleItems() {
+        AccountInfoResponse info = getAccountInfo();
+        return info != null && info.getOwnedItems() != null ? info.getOwnedItems() : List.of();
     }
 }

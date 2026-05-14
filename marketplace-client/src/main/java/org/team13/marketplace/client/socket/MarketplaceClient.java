@@ -38,6 +38,21 @@ public class MarketplaceClient {
                 data);
     }
 
+    public <T> SocketResponse send(String command, Object payload, TypeReference<T> dataType)
+            throws IOException {
+        Map<String, Object> payloadMap = mapper.convertValue(payload, new TypeReference<>() {});
+        SocketRequest req = new SocketRequest(command, payloadMap);
+        out.println(mapper.writeValueAsString(req));
+
+        String line = in.readLine();
+        JsonNode node = mapper.readTree(line);
+        T data = mapper.convertValue(node.get("data"), dataType);
+        return new SocketResponse(
+                node.get("status").asString("ERROR"),
+                node.get("message").asString(""),
+                data);
+    }
+
     public void disconnect() throws IOException {
         send("DISCONNECT", Map.of(), Void.class);
         socket.close();

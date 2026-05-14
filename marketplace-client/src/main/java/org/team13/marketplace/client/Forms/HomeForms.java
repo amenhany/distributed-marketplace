@@ -3,6 +3,7 @@ package org.team13.marketplace.client.Forms;
 import org.team13.marketplace.client.socket.MarketplaceClient;
 import org.team13.marketplace.dto.item.ItemDto;
 import org.team13.marketplace.socket.SocketResponse;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.List;
 
@@ -13,13 +14,12 @@ public class HomeForms {
         this.client = client;
     }
 
+    @SuppressWarnings("unchecked")
     public List<ItemDto> searchItems(String searchTerm) {
         try {
-            ItemDto searchRequest = new ItemDto();
-            searchRequest.setName(searchTerm);
-            searchRequest.setBrand(searchTerm);
+            java.util.Map<String, String> payload = java.util.Map.of("query", searchTerm == null ? "" : searchTerm);
 
-            SocketResponse response = client.send("SEARCH_ITEMS", searchRequest, List.class);
+            SocketResponse response = client.send("SEARCH", payload, new TypeReference<List<ItemDto>>() {});
 
             if ("OK".equalsIgnoreCase(response.getStatus())) {
                 return (List<ItemDto>) response.getData();
