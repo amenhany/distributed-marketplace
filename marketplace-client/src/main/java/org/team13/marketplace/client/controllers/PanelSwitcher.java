@@ -93,6 +93,25 @@ public class PanelSwitcher {
             e.printStackTrace();
         }
     }
+
+    public void switchToDepositPanel(AccountInfoResponse currentUser) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/deposit_panel.fxml"));
+            Parent root = loader.load();
+
+            DepositController controller = loader.getController();
+            controller.setClient(client);
+            controller.setPanelSwitcher(this);
+            controller.setCurrentUser(currentUser);
+
+            Scene scene = new Scene(root, 400, 350);
+            stage.setScene(scene);
+            stage.setTitle("Marketplace - Deposit");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
     public void switchToItemDetailsPanel(ItemDto item) {
         try {
